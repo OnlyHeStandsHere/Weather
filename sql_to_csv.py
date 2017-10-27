@@ -24,7 +24,11 @@ class SqlToCsv():
         try:
             results = cursor.execute(query).fetchall()
             with open(file_name, 'w') as csvFile:
-                writer = csv.writer(csvFile, dialect='excel' ,lineterminator='\n')
+                writer = csv.writer(csvFile, dialect='excel', lineterminator='\n')
+
+                if include_header:
+                    writer.writerow([d[0] for d in cursor.description])
+
                 writer.writerows(results)
         except Exception:
             self.write_log("An error occured creating csv file {}".format(sys.exc_info()))
